@@ -25,7 +25,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity<Cliente> getEscolaById(@PathVariable int codigo) {
+    public ResponseEntity<Cliente> getClienteById(@PathVariable int codigo) {
         Cliente cliente = clienteService.getClienteById(codigo);
         return ResponseEntity.ok(cliente);
     }

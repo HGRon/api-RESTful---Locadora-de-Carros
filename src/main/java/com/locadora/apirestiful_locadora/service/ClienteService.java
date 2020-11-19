@@ -2,6 +2,7 @@ package com.locadora.apirestiful_locadora.service;
 
 import com.locadora.apirestiful_locadora.dto.ClienteDTO;
 import com.locadora.apirestiful_locadora.model.Cliente;
+import com.locadora.apirestiful_locadora.model.Reserva;
 import com.locadora.apirestiful_locadora.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,11 @@ public class ClienteService {
     public Cliente atualizar(Cliente cliente) {
         getClienteById(cliente.getCodigo());
         return clienteRepository.atualizar(cliente);
+    }
+
+    public List<Reserva> reservasCliente(int idCliente) {
+        Cliente cliente = getClienteById(idCliente);
+        return cliente.getReservas();
     }
 
 }

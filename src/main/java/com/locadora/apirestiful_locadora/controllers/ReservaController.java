@@ -9,6 +9,7 @@ import com.locadora.apirestiful_locadora.service.ClienteService;
 import com.locadora.apirestiful_locadora.service.ReservaService;
 import com.locadora.apirestiful_locadora.service.VeiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
@@ -30,23 +31,49 @@ public class ReservaController {
     @Autowired
     private VeiculoService veiculoService;
 
+    @GetMapping
+    public List<Reserva> getReservas() {
+        return reservaService.getAllReservas();
+    }
+
     @GetMapping("/{codigo}")
     public ResponseEntity<Reserva> getReservaById(@PathVariable int codigo) {
         Reserva reserva = reservaService.getReservaById(codigo);
         return ResponseEntity.ok(reserva);
     }
 
-    @PostMapping
+    @GetMapping("/clientes/{idCliente}")
+    public List<Reserva> reservaCliente(@PathVariable int idCliente) {
+        return clienteService.reservasCliente(idCliente);
+    }
+
+    @GetMapping("/veiculos/{idVeiculo}")
+    public List<Reserva> reservaVeiculo(@PathVariable int idVeiculo) {
+        return reservaService.reservasVeiculo(idVeiculo);
+    }
+
+    @PostMapping("clientes/{idCliente}/veiculos/{idVeiculo}")
     public ResponseEntity<Void> salvar(@RequestBody Reserva reserva,
+                                       @PathVariable int idCliente,
+                                       @PathVariable int idVeiculo,
                                        HttpServletRequest request,
                                        UriComponentsBuilder builder
     ) {
 
-        Cliente cliente = clienteService.getClienteById(reserva.getCodigoCliente());
-        Veiculo veiculo = veiculoService.getVeiculoById(reserva.getCodigoVeiculo());
-        Reserva reservaAux = reservaService.salvar(reserva);
-        UriComponents uriComponents = builder.path(request.getRequestURI() + "/" + reservaAux.getCodigo()).build();
-        return ResponseEntity.created(uriComponents.toUri()).build();
+        clienteService.getClienteById(idCliente);
+        veiculoService.getVeiculoById(idVeiculo);
+
+        if(!reservaService.isValidDate(reserva)) {
+            return new ResponseEntity("DATA INVALIDA", HttpStatus.NOT_ACCEPTABLE);
+        } else if(reservaService.isUsedDate(reserva)){
+            return new ResponseEntity("DATA JÁ USADA", HttpStatus.IM_USED);
+        } else {
+            Reserva reservaAux = reservaService.salvar(reserva);
+
+
+            UriComponents uriComponents = builder.path(request.getRequestURI() + "/" + reservaAux.getCodigo()).build();
+            return ResponseEntity.created(uriComponents.toUri()).build();
+        }
     }
 
     @DeleteMapping("/{codigo}")

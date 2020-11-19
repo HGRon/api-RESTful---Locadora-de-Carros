@@ -1,10 +1,8 @@
 package com.locadora.apirestiful_locadora.repository;
 
-import com.locadora.apirestiful_locadora.model.Cliente;
 import com.locadora.apirestiful_locadora.model.Reserva;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,13 +10,8 @@ import java.util.Optional;
 @Component
 public class ReservaRepository {
 
-    private List<Reserva> reservas;
+    private ArrayList<Reserva> reservas = new ArrayList<Reserva>();
     private int nextId;
-
-    @PostConstruct
-    public void init() {
-
-    }
 
     public List<Reserva> getAllReservas() {
         return reservas;
@@ -32,6 +25,19 @@ public class ReservaRepository {
         }
 
         return Optional.empty();
+    }
+
+    public List<Reserva> reservasVeiculo(int idVeiculo) {
+
+        ArrayList<Reserva> reservasVeiculo = new ArrayList<Reserva>();
+
+        for (Reserva reserva : reservas) {
+            if (reserva.getCodigoVeiculo() == idVeiculo) {
+                reservasVeiculo.add(reserva);
+            }
+        }
+
+        return reservasVeiculo;
     }
 
     public Reserva salvar(Reserva reserva) {
@@ -56,4 +62,29 @@ public class ReservaRepository {
 
         return reservaAux;
     }
+
+    public boolean isUsedDate(Reserva reserva) {
+
+        for (Reserva reservaAux : reservas) {
+
+            if (
+                    (reserva.getCodigoVeiculo() == reservaAux.getCodigoVeiculo()) &
+                            (
+                                    (
+                                            reserva.getDataInicio().isAfter(reservaAux.getDataInicio()) &
+                                            reserva.getDataInicio().isBefore(reservaAux.getDataFim())
+                                    ) | (
+                                            reserva.getDataFim().isAfter(reservaAux.getDataInicio()) &
+                                            reserva.getDataInicio().isBefore(reservaAux.getDataFim())
+                                    )
+                            )
+            ){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }
