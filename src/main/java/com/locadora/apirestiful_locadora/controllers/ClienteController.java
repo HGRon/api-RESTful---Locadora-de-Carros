@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,11 +32,12 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody Cliente cliente,
+    public ResponseEntity<Void> salvar(@Valid @RequestBody ClienteDTO clienteDTO,
                                        HttpServletRequest request,
                                        UriComponentsBuilder builder
     ) {
-        Cliente clienteAux = clienteService.salvar(cliente);
+
+        Cliente clienteAux = clienteService.salvar(clienteService.fromDTO(clienteDTO));
         UriComponents uriComponents = builder.path(request.getRequestURI() + "/" + clienteAux.getCodigo()).build();
         return ResponseEntity.created(uriComponents.toUri()).build();
     }
@@ -54,7 +56,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable int codigo, @RequestBody ClienteDTO clienteDTO){
+    public ResponseEntity<Cliente> atualizar(@PathVariable int codigo,@Valid @RequestBody ClienteDTO clienteDTO){
 
         Cliente cliente = clienteService.fromDTO(clienteDTO);
         cliente.setCodigo(codigo);

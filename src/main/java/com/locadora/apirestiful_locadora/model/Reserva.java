@@ -1,5 +1,7 @@
 package com.locadora.apirestiful_locadora.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class Reserva {

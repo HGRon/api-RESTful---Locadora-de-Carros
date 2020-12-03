@@ -1,6 +1,5 @@
 package com.locadora.apirestiful_locadora.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente {
@@ -9,15 +8,14 @@ public class Cliente {
     private String nome;
     private String cpf;
     private String contato;
+    private String endereco;
 
-    private List<Reserva> reservas;
-
-    public List<Reserva> getReservas() {
-        return reservas;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void addReserva(Reserva reserva) {
-        this.reservas.add(reserva);
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public int getCodigo() {

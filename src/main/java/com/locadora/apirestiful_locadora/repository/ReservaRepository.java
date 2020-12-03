@@ -40,6 +40,19 @@ public class ReservaRepository {
         return reservasVeiculo;
     }
 
+    public List<Reserva> reservasCliente(int idCliente) {
+
+        ArrayList<Reserva> reservasCliente = new ArrayList<Reserva>();
+
+        for (Reserva reserva : reservas) {
+            if (reserva.getCodigoCliente() == idCliente) {
+                reservasCliente.add(reserva);
+            }
+        }
+
+        return reservasCliente;
+    }
+
     public Reserva salvar(Reserva reserva) {
         reserva.setCodigo(nextId++);
         reservas.add(reserva);

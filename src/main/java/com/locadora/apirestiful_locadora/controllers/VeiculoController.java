@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,11 +32,11 @@ public class VeiculoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody Veiculo veiculo,
+    public ResponseEntity<Void> salvar(@Valid @RequestBody VeiculoDTO veiculoDTO,
                                        HttpServletRequest request,
                                        UriComponentsBuilder builder
     ) {
-        Veiculo veiculoAux = veiculoService.salvar(veiculo);
+        Veiculo veiculoAux = veiculoService.salvar(veiculoService.fromDTO(veiculoDTO));
         UriComponents uriComponents = builder.path(request.getRequestURI() + "/" + veiculoAux.getCodigo()).build();
         return ResponseEntity.created(uriComponents.toUri()).build();
     }
@@ -54,7 +55,7 @@ public class VeiculoController {
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity<Veiculo> atualizar(@PathVariable int codigo, @RequestBody VeiculoDTO veiculoDTO){
+    public ResponseEntity<Veiculo> atualizar(@PathVariable int codigo,@Valid @RequestBody VeiculoDTO veiculoDTO){
 
         Veiculo veiculo = veiculoService.fromDTO(veiculoDTO);
         veiculo.setCodigo(codigo);

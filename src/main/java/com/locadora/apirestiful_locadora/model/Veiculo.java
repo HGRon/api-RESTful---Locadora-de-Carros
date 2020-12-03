@@ -5,7 +5,7 @@ public class Veiculo {
     private int codigo;
     private String marca;
     private String modelo;
-    private Double valorDiaria;
+    private double valorDiaria;
 
     public int getCodigo() {
         return codigo;

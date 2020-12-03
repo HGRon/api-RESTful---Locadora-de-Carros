@@ -22,14 +22,16 @@ public class ClienteRepository {
         c1.setNome("JOÃO SILVA");
         c1.setCpf("123.123.123-45");
         c1.setContato("11 912341234");
+        c1.setEndereco("Bairro x, rua y, numero 20");
 
         Cliente c2 = new Cliente();
         c2.setCodigo(2);
         c2.setNome("LILI SANTOS");
         c2.setCpf("123.123.123-45");
         c2.setContato("11 912341234");
+        c2.setEndereco("Bairro x, rua y, numero 20");
 
-        clientes = new ArrayList<Cliente>();
+        clientes = new ArrayList<>();
         clientes.add(c1);
         clientes.add(c2);
         nextId = 3;
